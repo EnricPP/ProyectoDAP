@@ -2,52 +2,52 @@ package com.example.proyectodap;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.Set;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ListAdapter.ListItemClickListener {
+
+    private static final int NUM_LIST_ITEMS = 20;
+
+    private ListAdapter mAdapter;
+    private RecyclerView mNumbersList;
+
+    private Toast mToast;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ListView listamain = findViewById(R.id.list_view_main);
-        ArrayList<String> dispositivos = new ArrayList<String>();
-        TextView txt_prueba = findViewById(R.id.txt_pulsado);
-        Button btn_logout = findViewById(R.id.btn_logout);
+        mNumbersList = (RecyclerView) findViewById(R.id.rv_list);
 
-        for (int i=1; i<=10; i++){
-            dispositivos.add("Elemento "+i);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        mNumbersList.setLayoutManager(layoutManager);
+
+        mNumbersList.setHasFixedSize(true);
+
+        mAdapter = new ListAdapter(NUM_LIST_ITEMS, this);
+        mNumbersList.setAdapter(mAdapter);
+
+    }
+
+    @Override
+    public void onListItemClick(int clickedItemIndex) {
+        if (mToast != null) {
+            mToast.cancel();
         }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, dispositivos);
+        String toastMessage = "Item #" + clickedItemIndex + " clicked.";
+        mToast = Toast.makeText(this, toastMessage, Toast.LENGTH_SHORT);
+        mToast.show();
 
-        listamain.setAdapter(adapter);
-        listamain.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                txt_prueba.setText(adapter.getItem(i).toString());
-            }
-        });
-
-        btn_logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent startLoginActivity = new Intent(MainActivity.this, LoginActivity.class);
-                startActivity(startLoginActivity);
-                finish();
-            }
-        });
+        Intent intent = new Intent(getApplicationContext(), ItemActivity.class);
+        intent.putExtra("itemID", clickedItemIndex);
+        startActivity(intent);
     }
 }
