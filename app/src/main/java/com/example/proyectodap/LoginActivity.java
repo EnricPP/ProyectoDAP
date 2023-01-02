@@ -28,6 +28,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        SharedPreferences.Editor editor;
+
         //Comprobar que el usuario no este ya logeado anteriormente
         sharedPreferences = getSharedPreferences(SHARED_PREF_NAME, MODE_PRIVATE);
         if (sharedPreferences.getString(KEY_MAIL,null) != null)
