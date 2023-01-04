@@ -16,12 +16,12 @@ public class ItemActivity extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
 
-        int id = -1;
-
-        if (extras != null)
-            id = extras.getInt("itemID");
-
-        itemID.setText("ITEM ID:" + id);
+//        int id = -1;
+//
+//        if (extras != null)
+//            id = extras.getInt("itemID");
+//
+//        itemID.setText("ITEM ID:" + id);
 
     }
 }

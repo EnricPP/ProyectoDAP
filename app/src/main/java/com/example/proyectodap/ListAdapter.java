@@ -1,27 +1,27 @@
 package com.example.proyectodap;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
 
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.NumberViewHolder> {
 
     final private ListItemClickListener mOnClickListener;
 
-    private int mNumberItems;
+    private ArrayList<Champion> mChampionList;
 
     public interface ListItemClickListener {
-        void onListItemClick(int clickedItemIndex);
+        void onListItemClick(Champion clickedItemIndex);
     }
 
-    public ListAdapter(int numberOfItems, ListItemClickListener listener) {
-        mNumberItems = numberOfItems;
+    public ListAdapter(ArrayList<Champion> championList, ListItemClickListener listener) {
+        mChampionList = championList;
         mOnClickListener = listener;
     }
 
@@ -40,33 +40,39 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.NumberViewHold
 
     @Override
     public void onBindViewHolder(NumberViewHolder holder, int position) {
-        holder.bind(position);
+        holder.bind(mChampionList.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return mNumberItems;
+        return mChampionList.size();
     }
 
     class NumberViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        TextView listItemNumberView;
+        TextView listItemName;
+        TextView listItemTitle;
 
         public NumberViewHolder(View itemView) {
             super(itemView);
 
-            listItemNumberView = (TextView) itemView.findViewById(R.id.tv_item_number);
+            listItemName = (TextView) itemView.findViewById(R.id.tv_item_name);
+            listItemTitle = (TextView) itemView.findViewById(R.id.tv_item_title);
+
             itemView.setOnClickListener(this);
         }
 
-        void bind(int listIndex) {
-            listItemNumberView.setText(String.valueOf(listIndex));
+        void bind(Champion champ) {
+
+            listItemName.setText(String.valueOf(champ.getName()));
+            listItemTitle.setText(String.valueOf(champ.getTitle()));
+
         }
 
         @Override
         public void onClick(View view) {
             int clickedPosition = getAdapterPosition();
-            mOnClickListener.onListItemClick(clickedPosition);
+            mOnClickListener.onListItemClick(mChampionList.get(clickedPosition));
         }
     }
 }
