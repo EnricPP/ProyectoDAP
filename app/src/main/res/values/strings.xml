@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ProyectoDAP</string>
+    <string name="app_name">ChampionsLOL</string>
 
     <string name="error_message">
         Failed to get results. Please try again.

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -52,21 +53,22 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.NumberViewHold
 
         TextView listItemName;
         TextView listItemTitle;
+        ImageView listImageChamp;
 
         public NumberViewHolder(View itemView) {
             super(itemView);
 
             listItemName = (TextView) itemView.findViewById(R.id.tv_item_name);
             listItemTitle = (TextView) itemView.findViewById(R.id.tv_item_title);
+            listImageChamp = (ImageView) itemView.findViewById(R.id.img_lst_personaje);
 
             itemView.setOnClickListener(this);
         }
 
         void bind(Champion champ) {
-
             listItemName.setText(String.valueOf(champ.getName()));
             listItemTitle.setText(String.valueOf(champ.getTitle()));
-
+            listImageChamp.setImageBitmap(champ.getImageBitmap());
         }
 
         @Override
