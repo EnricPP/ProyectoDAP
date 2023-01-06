@@ -1,5 +1,7 @@
 package com.example.proyectodap.utilities;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 
 import java.io.IOException;
@@ -7,6 +9,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.Scanner;
 
 public class NetworkUtils {
@@ -45,5 +48,13 @@ public class NetworkUtils {
         } finally {
             urlConnection.disconnect();
         }
+    }
+
+    public static Bitmap getURLImage(String url) throws Exception {
+        URL website = new URL(url);
+        URLConnection connection = website.openConnection();
+
+        Bitmap res = BitmapFactory.decodeStream(connection.getInputStream());
+        return res;
     }
 }
