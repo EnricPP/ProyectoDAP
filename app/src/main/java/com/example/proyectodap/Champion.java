@@ -3,57 +3,39 @@ package com.example.proyectodap;
 import android.graphics.Bitmap;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class Champion implements Serializable {
 
+    private String id;
+    private ArrayList<String> stats;
     private String name;
     private String title;
+    private String blurb;
     private transient Bitmap imageBitmap;
-    private int hp;
-    private int hpperlevel;
-    private int mp;
-    private int mpperlevel;
-    private int movespeed;
-    private int armor;
-    private int armorperlevel;
-    private int spellblock;
-    private int spellblockperlevel;
-    private int attackrange;
-    private int hpregen;
-    private int hpregenperlevel;
-    private int mpregen;
-    private int mpregenperlevel;
-    private int crit;
-    private int critperlevel;
-    private int attackdamage;
-    private int attakdamageperlevel;
-    private int attackspeedperlevel;
-    private int attackspeed;
+    private double hp;
+    private double armor;
+    private double spellblock;
+    private double attackdamage;
+    private double attackspeed;
+    private double attackrange;
     private String imagepath;
 
-    public Champion(String name, String title, int hp, int hpperlevel, int mp, int mpperlevel, int movespeed, int armor, int armorperlevel, int spellblock, int spellblockperlevel, int attackrange, int hpregen, int hpregenperlevel, int mpregen, int mpregenperlevel, int crit, int critperlevel, int attackdamage, int attakdamageperlevel, int attackspeedperlevel, int attackspeed,String imagepath) {
+
+    public Champion(ArrayList<String> stats, String id, String name, String title, String blurb, double hp, double armor,
+                    double spellblock, double attackdamage, double attackspeed, double attackrange,String imagepath) {
+
+        this.stats = stats;
+        this.id = id;
         this.name = name;
         this.title = title;
+        this.blurb = blurb;
         this.hp = hp;
-        this.hpperlevel = hpperlevel;
-        this.mp = mp;
-        this.mpperlevel = mpperlevel;
-        this.movespeed = movespeed;
         this.armor = armor;
-        this.armorperlevel = armorperlevel;
         this.spellblock = spellblock;
-        this.spellblockperlevel = spellblockperlevel;
-        this.attackrange = attackrange;
-        this.hpregen = hpregen;
-        this.hpregenperlevel = hpregenperlevel;
-        this.mpregen = mpregen;
-        this.mpregenperlevel = mpregenperlevel;
-        this.crit = crit;
-        this.critperlevel = critperlevel;
         this.attackdamage = attackdamage;
-        this.attakdamageperlevel = attakdamageperlevel;
-        this.attackspeedperlevel = attackspeedperlevel;
         this.attackspeed = attackspeed;
+        this.attackrange = attackrange;
         this.imagepath = imagepath;
     }
 
@@ -71,6 +53,40 @@ public class Champion implements Serializable {
 
     public String getImagepath() {
         return imagepath;
+    }
+
+
+    public String getChampionStats(){
+        String stats = String.join("/",this.stats);
+        return stats;
+    }
+
+    public double getHp() {
+        return hp;
+    }
+
+    public double getArmor() {
+        return armor;
+    }
+
+    public double getSpellblock() {
+        return spellblock;
+    }
+
+    public double getAttackdamage() {
+        return attackdamage;
+    }
+
+    public double getAttackrange() {
+        return attackrange;
+    }
+
+    public double getAttackspeed() {
+        return attackspeed;
+    }
+
+    public String getBlurb() {
+        return blurb;
     }
 
     public void setImageBitmap(Bitmap imageBitmap) {

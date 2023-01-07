@@ -18,7 +18,14 @@ public class ItemActivity extends AppCompatActivity {
         setContentView(R.layout.activity_item);
 
         ImageView championImg = findViewById(R.id.iv_champion);
-        TextView championName = findViewById(R.id.tv_champion_name);
+        TextView championBlurb = findViewById(R.id.tv_champ_blurb);
+        TextView championStats = findViewById(R.id.tv_champ_stats);
+        TextView championHP = findViewById(R.id.tv_champion_hp);
+        TextView championArmor = findViewById(R.id.tv_champion_armor);
+        TextView championAtckSpeed = findViewById(R.id.tv_champion_spd);
+        TextView championAtckDamage = findViewById(R.id.tv_champion_dmg);
+        TextView championAtckRange = findViewById(R.id.tv_champion_rng);
+        TextView championSpellBlock = findViewById(R.id.tv_spell_blk);
 
         Intent intent = getIntent();
 
@@ -26,8 +33,15 @@ public class ItemActivity extends AppCompatActivity {
         Bitmap bitmap = (Bitmap) intent.getParcelableExtra("championImg");
 
         championImg.setImageBitmap(bitmap);
-        championName.setText(c.getName());
+        championBlurb.setText(c.getBlurb());
+        championStats.setText(c.getChampionStats());
+        championHP.setText(Double.toString(c.getHp()));
+        championArmor.setText(Double.toString(c.getArmor()));
+        championAtckSpeed.setText(Double.toString(c.getAttackspeed()));
+        championAtckDamage.setText(Double.toString(c.getAttackdamage()));
+        championAtckRange.setText(Double.toString(c.getAttackrange()));
+        championSpellBlock.setText(Double.toString(c.getSpellblock()));
 
-
+        getSupportActionBar().setTitle(c.getName());
     }
 }

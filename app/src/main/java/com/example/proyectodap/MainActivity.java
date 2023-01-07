@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.proyectodap.utilities.NetworkUtils;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -109,36 +110,29 @@ public class MainActivity extends AppCompatActivity implements ListAdapter.ListI
 
                     //Iteramos por todos los campeones
                     while(keys.hasNext() ) {
+                        ArrayList<String> stats = new ArrayList<String>();
                         String key = (String)keys.next();
                         if ( data.get(key) instanceof JSONObject ) {
                             JSONObject champ = new JSONObject(data.get(key).toString());
 
                             id = champ.getString("id");
 
-                            JSONObject infochamp = champ.getJSONObject("stats");
-                            int hp =  infochamp.getInt("hp");
-                            int hpperlevel =  infochamp.getInt("hpperlevel");
-                            int mp =  infochamp.getInt("mp");
-                            int mpperlevel =  infochamp.getInt("mpperlevel");
-                            int movespeed =  infochamp.getInt("hp");
-                            int armor =  infochamp.getInt("hp");
-                            int armorperlevel =  infochamp.getInt("hp");
-                            int spellblock =  infochamp.getInt("hp");
-                            int spellblockperlevel =  infochamp.getInt("hp");
-                            int attackrange =  infochamp.getInt("hp");
-                            int hpregen =  infochamp.getInt("hp");
-                            int hpregenperlevel =  infochamp.getInt("hp");
-                            int mpregen =  infochamp.getInt("hp");
-                            int mpregenperlevel =  infochamp.getInt("hp");
-                            int crit =  infochamp.getInt("hp");
-                            int critperlevel =  infochamp.getInt("hp");
-                            int attackdamage =  infochamp.getInt("hp");
-                            int attakdamageperlevel =  infochamp.getInt("hp");
-                            int attackspeedperlevel =  infochamp.getInt("hp");
-                            int attackspeed =  infochamp.getInt("hp");
 
-                            Champion curr_champ = new Champion(id, champ.getString("title"),hp,hpperlevel,mp,mpperlevel,movespeed,armor,armorperlevel,spellblock,spellblockperlevel,attackrange,
-                                    hpregen,hpregenperlevel,mpregen,mpregenperlevel,crit,critperlevel,attackdamage,attakdamageperlevel,attackspeedperlevel,attackspeed,IMAGE_PATH + id + ".png");
+                            JSONArray statschamp = champ.getJSONArray("tags");
+
+                            for (int i = 0; i<statschamp.length(); i++)
+                               stats.add(statschamp.getString(i));
+
+                            JSONObject infochamp = champ.getJSONObject("stats");
+                            double hp =  infochamp.getDouble("hp");
+                            double armor =  infochamp.getDouble("armor");
+                            double spellblock =  infochamp.getDouble("spellblock");
+                            double attackdamage =  infochamp.getDouble("attackdamage");
+                            double attackspeed =  infochamp.getDouble("attackspeed");
+                            double attackrange =  infochamp.getDouble("attackrange");
+
+                            Champion curr_champ = new Champion(stats,id, champ.getString("name"),champ.getString("title"), champ.getString("blurb") ,
+                                    hp, armor,spellblock,attackdamage, attackspeed, attackrange, IMAGE_PATH + id + ".png");
 
                             Thread t = new Thread(() -> {
                                 try {
