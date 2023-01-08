@@ -2,6 +2,8 @@ package com.example.proyectodap;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Notification;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
@@ -10,10 +12,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.example.proyectodap.notification.NotificationHandler;
 import com.example.proyectodap.utilities.NetworkUtils;
 import com.squareup.picasso.Picasso;
 
@@ -37,8 +42,16 @@ public class MainActivity extends AppCompatActivity implements ListAdapter.ListI
     private ProgressBar mLoadingIndicator;
     private TextView mErrorMessageDisplay;
 
+    private SwipeRefreshLayout swipeRefreshLayout;
+
+    private String SearchResult;
+
+    private NotificationHandler handler;
+
+
     final static String IMAGE_PATH =
             "http://ddragon.leagueoflegends.com/cdn/12.23.1/img/champion/";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +62,17 @@ public class MainActivity extends AppCompatActivity implements ListAdapter.ListI
         mErrorMessageDisplay = (TextView) findViewById(R.id.tv_error_message_display);
         mLoadingIndicator = (ProgressBar) findViewById(R.id.pb_loading_indicator);
         championList = new ArrayList<Champion>();
+        handler = new NotificationHandler(this);
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                checkChampionsUpdate();
+                swipeRefreshLayout.setRefreshing(false);
+
+            }
+        });
 
         getSupportActionBar().hide();
 
@@ -59,6 +83,36 @@ public class MainActivity extends AppCompatActivity implements ListAdapter.ListI
 
         ChampionTask champTask = (ChampionTask) new  ChampionTask();
         champTask.execute(NetworkUtils.buildUrl());
+
+
+    }
+    private void checkChampionsUpdate() {
+
+        String result = SearchResult;
+
+        Thread t = new Thread(() -> {
+            try {
+                String new_result = URLtoString(NetworkUtils.buildUrl());
+
+                if (result.equals(new_result)){
+                    Notification.Builder nBuilder = handler.createNotification("No new updates", "No changes in the characters", true);
+                    handler.getManager().notify(1,nBuilder.build());
+                }
+                else{
+                    Notification.Builder nBuilder = handler.createNotification("New updates", "There are changes in the characters", true);
+                    handler.getManager().notify(1,nBuilder.build());
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
+        t.start();
+        try {
+            t.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     private void showJsonDataView() {
@@ -72,9 +126,22 @@ public class MainActivity extends AppCompatActivity implements ListAdapter.ListI
         mErrorMessageDisplay.setVisibility(View.VISIBLE);
     }
 
+    private String URLtoString (URL... params){
+
+        URL searchUrl = params[0];
+        String championSearchResults = null;
+        try {
+            championSearchResults = NetworkUtils.getResponseFromHttpUrl(searchUrl);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        SearchResult = championSearchResults;
+        return championSearchResults;
+    }
+
+
     //tarea en segundo plano (Obtener campeones)
     public class ChampionTask extends AsyncTask<URL, Void, String>{
-
 
         @Override
         protected void onPreExecute() {
@@ -84,14 +151,7 @@ public class MainActivity extends AppCompatActivity implements ListAdapter.ListI
 
         @Override
         protected String doInBackground(URL... params) {
-            URL searchUrl = params[0];
-            String githubSearchResults = null;
-            try {
-                githubSearchResults = NetworkUtils.getResponseFromHttpUrl(searchUrl);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return githubSearchResults;
+            return URLtoString(params);
         }
 
         @Override
@@ -169,4 +229,5 @@ public class MainActivity extends AppCompatActivity implements ListAdapter.ListI
         intent.putExtra("champion", clickedChamp).putExtra("championImg", clickedChamp.getImageBitmap());
         startActivity(intent);
     }
+
 }
