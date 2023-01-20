@@ -70,7 +70,7 @@ public class ItemActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemThatWasClickedId = item.getItemId();
 
-        if (itemThatWasClickedId == R.id.action_share) {
+        if (itemThatWasClickedId == R.id.action_profile) {
 
             String sendChampp = sendChamp();
 

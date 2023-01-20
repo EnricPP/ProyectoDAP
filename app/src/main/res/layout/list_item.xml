@@ -15,7 +15,7 @@
         android:layout_gravity="center_vertical|start"
         android:fontFamily="monospace"
         android:text="Nombre"
-        android:textSize="34sp"
+        android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/img_lst_personaje"
         app:layout_constraintStart_toStartOf="parent"

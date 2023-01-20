@@ -9,6 +9,8 @@ import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -74,8 +76,6 @@ public class MainActivity extends AppCompatActivity implements ListAdapter.ListI
             }
         });
 
-        getSupportActionBar().hide();
-
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mChampionList.setLayoutManager(layoutManager);
         mChampionList.setHasFixedSize(true);
@@ -86,6 +86,26 @@ public class MainActivity extends AppCompatActivity implements ListAdapter.ListI
 
 
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.profile, menu);
+        return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemThatWasClickedId = item.getItemId();
+
+        if (itemThatWasClickedId == R.id.action_profile) {
+            startProfileActivity();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
     private void checkChampionsUpdate() {
 
         String result = SearchResult;
@@ -228,6 +248,11 @@ public class MainActivity extends AppCompatActivity implements ListAdapter.ListI
         Intent intent = new Intent(getApplicationContext(), ItemActivity.class);
         intent.putExtra("champion", clickedChamp).putExtra("championImg", clickedChamp.getImageBitmap());
         startActivity(intent);
+    }
+
+    private void startProfileActivity() {
+        Intent startProfileActivity = new Intent(MainActivity.this, ProfileActivity.class);
+        startActivity(startProfileActivity);
     }
 
 }
